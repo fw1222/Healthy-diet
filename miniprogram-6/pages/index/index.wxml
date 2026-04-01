@@ -1,0 +1,107 @@
+<!--index.wxml-->
+<swiper
+autoplay indicator-dots indicator-color="#FFFFF" interval="4000"
+ >
+ <swiper-item>
+   <image src="/image/banner/banner1.png" mode="heightFix"/>
+ </swiper-item>
+ <swiper-item>
+   <image src="/image/banner/banner2.png" mode="heightFix"/>
+ </swiper-item>
+ <swiper-item>
+   <image src="/image/banner/banner3.png" mode="heightFix"/>
+ </swiper-item>
+</swiper>
+
+<view class="tip"><text class="iconfont icon-meishi icon"></text>欢迎使用膳食健康助手！祝您身体安康~</view>
+
+<view class="score-card">
+    <view class="score-title">今日膳食评分</view>
+    <view class="score-content">
+      <view class="score-circle">
+        <circular-progress percent="{{dailyScore}}" size="120" stroke-width="8" active-color="#4CAF50">
+          <view class="score-text">{{dailyScore}}</view>
+        </circular-progress>
+      </view>
+      <view class="score-details">
+        <view class="nutrient-score">
+          <text>蛋白质</text>
+          <text class="score">{{proteinScore}}分</text>
+        </view>
+        <view class="nutrient-score">
+          <text>脂肪</text>
+          <text class="score">{{fatScore}}分</text>
+        </view>
+        <view class="nutrient-score">
+          <text>膳食纤维</text>
+          <text class="score">{{fiberScore}}分</text>
+        </view>
+        <view class="nutrient-score">
+          <text>碳水化物</text>
+          <text class="score">{{carbScore}}分</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  
+<view class="menu">
+<navigator url="/pages/record/record">
+  <view class="item">
+<image src="/image/record.png" mode="" class="img"/>
+<text>上传饮食</text>
+</view>
+</navigator>
+
+<view class="item">
+  <image src="/image/meshi2.png" mode="" class="img"/>
+<text>推荐菜谱</text>
+</view>
+</view>
+
+<view class="title">
+<text >今日推荐</text>
+</view>
+
+<view class="recipe">
+<view class="item">
+<image src="/image/food/food1.png" mode="" class="img" />
+<view class="txt">
+<text>西红柿炒鸡蛋</text>
+<view class="more">
+<text >查看菜谱</text>
+<text class="iconfont icon-you icon"></text>
+</view>
+</view>
+</view>
+<view class="item">
+<image src="/image/food/food4.png" mode="" class="img" />
+<view class="txt">
+<text>红烧排骨</text>
+<view class="more">
+<text >查看菜谱</text>
+<text class="iconfont icon-you icon"></text>
+</view>
+</view>
+</view>
+<view class="item">
+<image src="/image/food/food2.png" mode="" class="img" />
+<view class="txt">
+<text>芹菜炒牛肉</text>
+<view class="more">
+<text >查看菜谱</text>
+<text class="iconfont icon-you icon"></text>
+</view>
+</view>
+</view>
+<view class="item">
+<image src="/image/food/food3.png" mode="" class="img" />
+<view class="txt">
+<text>香炒大虾</text>
+<view class="more">
+<text >查看菜谱</text>
+<text class="iconfont icon-you icon"></text>
+</view>
+</view>
+</view>
+</view>

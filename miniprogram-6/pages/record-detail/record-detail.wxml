@@ -1,0 +1,149 @@
+<!--pages/record-detail/record-detail.wxml-->
+<view class="container" style="{{progressStyle}}">
+  <!-- 头部信息 -->
+  <view class="header">
+    <view class="date-info">
+      <text class="date">{{formattedDate}}</text>
+      <text class="week">{{weekDay}}</text>
+    </view>
+    <view class="score-section">
+      <view class="score-circle">
+        <view class="circle-outer">
+          <view class="circle-inner">
+            <text class="score-text">{{dailyScore}}</text>
+          </view>
+        </view>
+      </view>
+      <text class="score-label">综合评分</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 营养概览 -->
+  <view class="nutrition-overview" wx:if="{{!loading}}">
+    <view class="section-title">营养摄入概览</view>
+    <view class="nutrition-cards">
+      <view class="nutrition-card protein">
+        <view class="nutrient-icon">🥩</view>
+        <view class="nutrient-info">
+          <text class="nutrient-value">{{totalProtein}}g</text>
+          <text class="nutrient-label">蛋白质</text>
+        </view>
+        <view class="nutrient-progress">
+          <text class="progress-text">{{proteinPercent}}%</text>
+          <view class="progress-bar">
+            <view class="progress-fill protein-fill"></view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="nutrition-card fat">
+        <view class="nutrient-icon">🥑</view>
+        <view class="nutrient-info">
+          <text class="nutrient-value">{{totalFat}}g</text>
+          <text class="nutrient-label">脂肪</text>
+        </view>
+        <view class="nutrient-progress">
+          <text class="progress-text">{{fatPercent}}%</text>
+          <view class="progress-bar">
+            <view class="progress-fill fat-fill"></view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="nutrition-card carb">
+        <view class="nutrient-icon">🍚</view>
+        <view class="nutrient-info">
+          <text class="nutrient-value">{{totalCarbs}}g</text>
+          <text class="nutrient-label">碳水化物</text>
+        </view>
+        <view class="nutrient-progress">
+          <text class="progress-text">{{carbPercent}}%</text>
+          <view class="progress-bar">
+            <view class="progress-fill carb-fill"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="calories-info">
+      <text class="calories-value">{{totalCalories}} kcal</text>
+      <text class="calories-label">总热量摄入</text>
+    </view>
+  </view>
+
+  <!-- 餐次记录 -->
+  <view class="meals-section" wx:if="{{!loading && meals.length > 0}}">
+    <view class="section-title">
+      <text>餐次记录</text>
+      <text class="meal-count">{{mealCount}} 餐</text>
+    </view>
+    
+    <view class="meals-list">
+      <view class="meal-item" wx:for="{{meals}}" wx:key="index">
+        <view class="meal-header">
+          <view class="meal-type-time">
+            <text class="meal-type {{item.mealType}}">{{item.mealTypeText}}</text>
+            <text class="meal-time">{{item.time}}</text>
+          </view>
+          <view class="meal-calories">{{item.calories}} kcal</view>
+        </view>
+        
+        <!-- 实际食物列表 -->
+        <view class="foods-list">
+          <view class="food-item" wx:for="{{item.foods}}" wx:key="name" wx:for-item="food" wx:for-index="foodIndex">
+            <text class="food-name">{{food.name}}</text>
+            <view class="food-details">
+              <text class="food-quantity">{{food.quantity}}g</text>
+              <!-- 显示食物营养信息 -->
+              <view class="food-nutrition" wx:if="{{food.protein || food.fat || food.carbs}}">
+                <text class="food-nutrient">蛋白质: {{food.protein || 0}}g</text>
+                <text class="food-nutrient">脂肪: {{food.fat || 0}}g</text>
+                <text class="food-nutrient">碳水: {{food.carbs || 0}}g</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <view class="meal-nutrients">
+          <view class="nutrient-detail">
+            <text class="nutrient-name">蛋白质</text>
+            <text class="nutrient-value">{{item.protein}}g</text>
+          </view>
+          <view class="nutrient-detail">
+            <text class="nutrient-name">脂肪</text>
+            <text class="nutrient-value">{{item.fat}}g</text>
+          </view>
+          <view class="nutrient-detail">
+            <text class="nutrient-name">碳水</text>
+            <text class="nutrient-value">{{item.carbs}}g</text>
+          </view>
+        </view>
+        
+        <view class="meal-score">
+          <text class="score-label">餐次评分</text>
+          <text class="score-value {{getMealScoreClass(item.score)}}">{{item.score}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无记录状态 -->
+  <view class="empty-state" wx:if="{{!loading && meals.length === 0}}">
+    <text class="empty-icon">🍽️</text>
+    <text class="empty-text">当天没有饮食记录</text>
+    <text class="empty-desc">去记录您的第一餐吧</text>
+  </view>
+
+  <!-- 健康建议 -->
+  <view class="advice-section" wx:if="{{!loading && healthAdvice}}">
+    <view class="section-title">💡 健康建议</view>
+    <view class="advice-content">
+      <text class="advice-text">{{healthAdvice}}</text>
+    </view>
+  </view>
+</view>

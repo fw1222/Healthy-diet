@@ -1,0 +1,101 @@
+<!--pages/recipe/recipe.wxml-->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">我的食谱</text>
+    <text class="recipe-count" wx:if="{{recipes.length > 0}}">共{{recipes.length}}个食谱</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 食谱列表 -->
+  <view class="recipe-list" wx:else>
+    <view 
+      class="recipe-item" 
+      wx:for="{{recipes}}" 
+      wx:key="recipe_id"
+    >
+      <!-- 食谱头部 -->
+      <view class="recipe-header">
+        <view class="recipe-title-section">
+          <text class="recipe-name">{{item.recipe_name}}</text>
+          <text class="recipe-type {{item.meal_type}}">{{getMealTypeText(item.meal_type)}}</text>
+        </view>
+        <text class="recipe-time">{{formatDate(item.created_at)}}</text>
+      </view>
+
+      <!-- 食物列表 -->
+      <view class="foods-section">
+        <view class="section-title">食材清单</view>
+        <view class="foods-list">
+          <view 
+            class="food-item" 
+            wx:for="{{item.foods}}" 
+            wx:key="id"
+          >
+            <view class="food-info">
+              <text class="food-name">{{item.name}}</text>
+              <text class="food-amount">{{item.amount}}g</text>
+            </view>
+            <view class="food-nutrition">
+              <text class="nutrition-item">蛋白质 {{item.protein.toFixed(1)}}g</text>
+              <text class="nutrition-item">脂肪 {{item.fat.toFixed(1)}}g</text>
+              <text class="nutrition-item">碳水 {{item.carbohydrate.toFixed(1)}}g</text>
+            </view>
+          </view>
+          
+          <!-- 空状态 -->
+          <view class="empty-foods" wx:if="{{item.foods.length === 0}}">
+            <text class="empty-text">暂无食材信息</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 营养汇总 -->
+      <view class="nutrition-summary">
+        <view class="section-title">营养汇总</view>
+        <view class="summary-grid">
+          <view class="summary-item">
+            <text class="summary-label">总热量</text>
+            <text class="summary-value calories">{{item.totals.calories}} kcal</text>
+          </view>
+          <view class="summary-item">
+            <text class="summary-label">蛋白质</text>
+            <text class="summary-value">{{item.totals.protein}}g</text>
+          </view>
+          <view class="summary-item">
+            <text class="summary-label">脂肪</text>
+            <text class="summary-value">{{item.totals.fat}}g</text>
+          </view>
+          <view class="summary-item">
+            <text class="summary-label">碳水</text>
+            <text class="summary-value">{{item.totals.carbohydrate}}g</text>
+          </view>
+          <view class="summary-item">
+            <text class="summary-label">膳食纤维</text>
+            <text class="summary-value">{{item.totals.fiber}}g</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="recipe-actions">
+        <button class="btn btn-delete" bindtap="deleteRecipe" data-id="{{item.recipe_id}}" data-name="{{item.recipe_name}}">删除</button>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{recipes.length === 0}}">
+      <view class="empty-icon">
+        <text>📚</text>
+      </view>
+      <text class="empty-text">暂无食谱</text>
+      <text class="empty-desc">在记录页面可以保存常用食谱哦</text>
+      <navigator url="/pages/record/record" class="btn-add-recipe">
+        <text>去记录页面创建食谱</text>
+      </navigator>
+    </view>
+  </view>
+</view>
