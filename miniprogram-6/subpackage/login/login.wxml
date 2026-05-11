@@ -1,0 +1,8 @@
+<!--pages/login/login.wxml-->
+<view class="page">
+  <view class="card">
+    <text class="title">登录膳食健康助手</text>
+    <text class="desc">使用微信授权后即可同步您的饮食与健康数据</text>
+    <button class="btn-primary" bindtap="handleLogin">微信一键登录</button>
+  </view>
+</view>

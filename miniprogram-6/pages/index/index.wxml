@@ -1,0 +1,126 @@
+<!--pages/index/index.wxml-->
+<swiper autoplay indicator-dots indicator-color="#FFFFF" interval="4000">
+  <swiper-item>
+    <image src="/image/banner/banner1.jpg" mode="heightFix"/>
+  </swiper-item>
+  <swiper-item>
+    <image src="/image/banner/banner2.jpg" mode="heightFix"/>
+  </swiper-item>
+  <swiper-item>
+    <image src="/image/banner/banner3.jpg" mode="heightFix"/>
+  </swiper-item>
+</swiper>
+
+<view class="tip">
+  <text class="iconfont icon-meishi icon"></text>
+  <text>欢迎使用膳食健康助手！祝您身体安康~</text>
+</view>
+
+<!-- 今日膳食评分卡片 -->
+<view class="score-card">
+  <view class="score-header">
+    <text class="score-title">今日膳食评分</text>
+    <text class="score-value">{{dailyScore}}</text>
+  </view>
+  
+  <!-- 四项评分 -->
+  <view class="score-items">
+    <view class="score-item" bindtap="toggleDetail" data-nutrient="protein">
+      <view class="item-info">
+        <text class="item-name">🥩 蛋白质</text>
+        <text class="item-score {{proteinScore >= 80 ? 'high' : proteinScore >= 60 ? 'medium' : 'low'}}">{{proteinScore}}分</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{proteinScore}}%; background: {{proteinScore >= 80 ? '#4CAF50' : proteinScore >= 60 ? '#FFC107' : '#F44336'}}"></view>
+      </view>
+    </view>
+    
+    <view class="score-item" bindtap="toggleDetail" data-nutrient="fat">
+      <view class="item-info">
+        <text class="item-name">🥑 脂肪</text>
+        <text class="item-score {{fatScore >= 80 ? 'high' : fatScore >= 60 ? 'medium' : 'low'}}">{{fatScore}}分</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{fatScore}}%; background: {{fatScore >= 80 ? '#4CAF50' : fatScore >= 60 ? '#FFC107' : '#F44336'}}"></view>
+      </view>
+    </view>
+    
+    <view class="score-item" bindtap="toggleDetail" data-nutrient="fiber">
+      <view class="item-info">
+        <text class="item-name">🌿 膳食纤维</text>
+        <text class="item-score {{fiberScore >= 80 ? 'high' : fiberScore >= 60 ? 'medium' : 'low'}}">{{fiberScore}}分</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{fiberScore}}%; background: {{fiberScore >= 80 ? '#4CAF50' : fiberScore >= 60 ? '#FFC107' : '#F44336'}}"></view>
+      </view>
+    </view>
+    
+    <view class="score-item" bindtap="toggleDetail" data-nutrient="carb">
+      <view class="item-info">
+        <text class="item-name">🍚 碳水化物</text>
+        <text class="item-score {{carbScore >= 80 ? 'high' : carbScore >= 60 ? 'medium' : 'low'}}">{{carbScore}}分</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{carbScore}}%; background: {{carbScore >= 80 ? '#4CAF50' : carbScore >= 60 ? '#FFC107' : '#F44336'}}"></view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 扣分详情 -->
+  <view class="detail-panel" wx:if="{{showDetail}}">
+    <view class="detail-header">
+      <text class="detail-icon">{{detailIcon}}</text>
+      <text class="detail-title">{{detailName}}详情</text>
+    </view>
+    <view class="detail-content">
+      <view class="detail-row">
+        <text>摄入量</text>
+        <text class="detail-value">{{detailValue}}{{detailUnit}}</text>
+      </view>
+      <view class="detail-row">
+        <text>推荐范围</text>
+        <text class="detail-value">{{detailMin}}-{{detailMax}}{{detailUnit}}</text>
+      </view>
+      <view class="detail-row">
+        <text>最佳值</text>
+        <text class="detail-value">{{detailOptimal}}{{detailUnit}}</text>
+      </view>
+      <view class="detail-reason" wx:if="{{detailDeduction > 0}}">
+        <text class="reason-tag">⚠️ 扣分原因</text>
+        <text class="reason-text">{{detailReason}}</text>
+        <text class="deduction">-{{detailDeduction}}分</text>
+      </view>
+      <view class="detail-reason perfect" wx:else>
+        <text class="reason-tag">✅ 完美</text>
+        <text class="reason-text">{{detailReason}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 快捷入口 -->
+<view class="menu">
+  <view class="menu-item" bindtap="goToRecord">
+    <image src="/image/record.png" class="menu-icon"/>
+    <text>上传饮食</text>
+  </view>
+  <navigator url="/pages/recipe/recipe" class="menu-item" open-type="navigate">
+    <image src="/image/meshi2.png" class="menu-icon"/>
+    <text>我的菜谱</text>
+  </navigator>
+</view>
+
+<!-- 今日推荐 -->
+<view class="section">
+  <view class="section-header">
+    <text class="section-title">今日推荐</text>
+    <text class="section-more">查看更多 ›</text>
+  </view>
+  
+  <scroll-view scroll-x class="recipe-list" show-scrollbar="{{false}}">
+    <view class="recipe-item" wx:for="{{recipes}}" wx:key="index">
+      <image src="{{item.img}}" class="recipe-img"/>
+      <text class="recipe-name">{{item.name}}</text>
+    </view>
+  </scroll-view>
+</view>

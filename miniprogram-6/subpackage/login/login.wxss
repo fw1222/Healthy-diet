@@ -1,0 +1,38 @@
+/* pages/login/login.wxss */
+.page {
+  min-height: 100vh;
+  padding: 48rpx;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #e8fff8 0%, #f5f5f5 40%);
+}
+
+.card {
+  margin-top: 80rpx;
+  padding: 48rpx 40rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0 12rpx 40rpx rgba(0, 190, 154, 0.12);
+}
+
+.title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.desc {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 48rpx;
+}
+
+.btn-primary {
+  background: #00be9a !important;
+  color: #fff !important;
+  border-radius: 48rpx !important;
+  font-size: 32rpx;
+}

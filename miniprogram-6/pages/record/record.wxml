@@ -1,0 +1,247 @@
+<!-- pages/record/record.wxml -->
+<view class="record-page">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">记录膳食</text>
+  </view>
+
+  <!-- 记录表单 -->
+  <view class="record-form">
+    <!-- 时段选择 -->
+    <view class="form-section">
+      <text class="section-title">选择时段</text>
+      <view class="meal-type-selector">
+        <view 
+          class="meal-type-item {{selectedMealType === index ? 'active' : ''}}"
+          wx:for="{{mealTypes}}" 
+          wx:key="index"
+          bindtap="selectMealType"
+          data-index="{{index}}"
+        >
+          <text class="meal-type-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 拍照识别入口 -->
+<view class="form-section">
+  <view class="camera-btn" bindtap="takePhotoForRecognize">
+    <text class="camera-icon">📷</text>
+    <text>拍照识别食物</text>
+  </view>
+  <text class="camera-tip">拍照后AI会自动识别食物并填入下方</text>
+</view>
+
+    <!-- 食物搜索和选择 -->
+    <view class="form-section">
+      <text class="section-title">选择食物</text>
+      
+      <!-- 搜索框 -->
+      <view class="search-box">
+        <input 
+          class="search-input"
+          type="text"
+          placeholder="输入食物名称搜索"
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+          bindfocus="onSearchFocus"
+        />
+        <text class="search-icon">🔍</text>
+      </view>
+
+      <!-- 搜索结果 -->
+      <view class="search-results" wx:if="{{searchResults.length > 0 && showSearchResults}}">
+        <view 
+          class="search-result-item" 
+          wx:for="{{searchResults}}" 
+          wx:key="id"
+          bindtap="selectFood"
+          data-item="{{item}}"
+        >
+          <text class="food-name">{{item.name}}</text>
+          <text class="food-nutrition">
+            蛋白质{{item.protein}}g 脂肪{{item.fat}}g 碳水{{item.carbohydrate}}g
+          </text>
+        </view>
+      </view>
+
+      <!-- 已选食物列表 -->
+      <view class="selected-foods" wx:if="{{selectedFoods.length > 0}}">
+        <text class="section-subtitle">已选食物</text>
+        <view 
+          class="selected-food-item" 
+          wx:for="{{selectedFoods}}" 
+          wx:key="id"
+        >
+          <view class="food-info">
+            <text class="food-name">{{item.name}}</text>
+            <text class="food-details">
+              蛋白质{{item.protein}}g 脂肪{{item.fat}}g 碳水{{item.carbohydrate}}g
+            </text>
+          </view>
+          <view class="food-quantity">
+            <input 
+              class="quantity-input"
+              type="number"
+              placeholder="克重"
+              value="{{item.quantity}}"
+              bindinput="onQuantityInput"
+              data-index="{{index}}"
+            />
+            <text class="unit">g</text>
+            <text class="remove-btn" bindtap="removeFood" data-index="{{index}}">×</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快速食物推荐 -->
+    <view class="form-section" wx:if="{{!selectedFoods.length}}">
+      <text class="section-title">常用食物</text>
+      <view class="quick-foods">
+        <view 
+          class="quick-food-item"
+          wx:for="{{quickFoods}}"
+          wx:key="id"
+          bindtap="selectQuickFood"
+          data-item="{{item}}"
+        >
+          <text class="quick-food-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 营养信息汇总 -->
+    <view class="form-section" wx:if="{{selectedFoods.length > 0}}">
+      <text class="section-title">营养汇总</text>
+      <view class="nutrition-summary">
+        <view class="nutrition-item">
+          <text class="nutrition-label">总蛋白质</text>
+          <text class="nutrition-value">{{totalNutrition.protein}}g</text>
+        </view>
+        <view class="nutrition-item">
+          <text class="nutrition-label">总脂肪</text>
+          <text class="nutrition-value">{{totalNutrition.fat}}g</text>
+        </view>
+        <view class="nutrition-item">
+          <text class="nutrition-label">总碳水</text>
+          <text class="nutrition-value">{{totalNutrition.carbohydrate}}g</text>
+        </view>
+        <view class="nutrition-item">
+          <text class="nutrition-label">总热量</text>
+          <text class="nutrition-value">{{totalNutrition.calories}}kcal</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+<!-- 食谱功能 -->
+<view class="recipe-section" wx:if="{{selectedFoods.length > 0}}">
+  <view class="recipe-options">
+    <view class="recipe-option" bindtap="toggleSaveAsRecipe">
+      <text class="recipe-checkbox {{saveAsRecipe ? 'checked' : ''}}">
+        {{saveAsRecipe ? '✓' : ''}}
+      </text>
+      <text class="recipe-label">保存为固定食谱</text>
+    </view>
+    
+    <view class="recipe-option" bindtap="showRecipeList">
+      <text class="recipe-icon">📚</text>
+      <text class="recipe-label">使用已有食谱</text>
+    </view>
+  </view>
+
+  <!-- 食谱名称输入 -->
+  <view class="recipe-name-input" wx:if="{{saveAsRecipe}}">
+    <input 
+      class="recipe-input"
+      type="text"
+      placeholder="输入食谱名称（如：营养早餐）"
+      value="{{recipeName}}"
+      bindinput="onRecipeNameInput"
+    />
+  </view>
+</view>
+
+<!-- 食谱列表弹窗 -->
+<view class="recipe-modal" wx:if="{{showRecipeList}}">
+  <view class="recipe-modal-content">
+    <view class="recipe-modal-header">
+      <text class="modal-title">我的食谱</text>
+      <text class="modal-close" bindtap="hideRecipeList">×</text>
+    </view>
+    <view class="recipe-list">
+      <view 
+        class="recipe-item" 
+        wx:for="{{userRecipes}}" 
+        wx:key="recipe_id"
+        bindtap="selectRecipe"
+        data-id="{{item.recipe_id}}"
+      >
+        <view class="recipe-info">
+          <text class="recipe-name">{{item.recipe_name}}</text>
+          <text class="recipe-details">
+            {{item.meal_type === 'breakfast' ? '早餐' : 
+              item.meal_type === 'lunch' ? '午餐' : 
+              item.meal_type === 'dinner' ? '晚餐' : '加餐'}} 
+            · {{item.food_count}}种食材 · {{Math.round(item.total_calories)}}kcal
+          </text>
+        </view>
+        <text class="recipe-arrow">›</text>
+      </view>
+      
+      <view class="empty-recipes" wx:if="{{userRecipes.length === 0}}">
+        <text class="empty-text">暂无食谱，快去创建吧！</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="btn btn-cancel" bindtap="resetForm">重置</button>
+    <button 
+      class="btn btn-save {{!canSave ? 'disabled' : ''}}" 
+      bindtap="saveRecord"
+      disabled="{{!canSave}}"
+    >
+      保存记录
+    </button>
+  </view>
+
+
+  <!-- 今日记录列表 -->
+  <view class="today-records-section">
+    <view class="section-header">
+      <text class="section-title">今日记录</text>
+      <text class="record-count">共{{todayRecords.length}}条</text>
+    </view>
+    
+    <view class="records-list">
+      <view 
+        class="record-item" 
+        wx:for="{{todayRecords}}" 
+        wx:key="id"
+      >
+      <view class="record-main">
+        <text class="meal-type-tag {{item.mealType === '早餐' ? 'breakfast' : item.mealType === '午餐' ? 'lunch' : item.mealType === '晚餐' ? 'dinner' : 'snack'}}">
+          {{item.mealType}}
+        </text>
+        <view class="food-info">
+          <text class="food-name">{{item.foodName}}</text>
+          <text class="food-quantity" wx:if="{{item.quantity}}">{{item.quantity}}</text>
+        </view>
+        
+      </view>
+      <view class="record-details">
+        <text class="total-calories">{{item.totalCalories}}kcal</text>
+          <text class="remove-record" bindtap="removeRecord" data-id="{{item.id}}">删除</text>
+        </view>
+      </view>
+      
+      <view class="empty-state" wx:if="{{todayRecords.length === 0}}">
+        <text class="empty-text">今日还没有记录，快来添加第一餐吧！</text>
+      </view>
+    </view>
+  </view>
+</view>

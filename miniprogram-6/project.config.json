@@ -1,0 +1,32 @@
+{
+  "appid": "wx731f92fc83708ad5",
+  "miniprogramRoot": "",
+  "projectname": "demo",
+  "setting": {
+    "urlCheck": true,
+    "eslint": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "packNpmManually": true,
+  "packNpmRelationList": [
+    {
+      "packageJsonPath": "./package.json",
+      "miniprogramNpmDistDir": "./"
+    }
+  ],
+  "compileType": "miniprogram",
+  "libVersion": "3.3.5",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}
